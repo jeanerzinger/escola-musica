@@ -1,0 +1,60 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Lista de Cursos</title>
+</h:head>
+
+<h:body>
+
+	<p:panel header="Lista de Cursos">
+		<p:button value="Novo Curso" outcome="curso_formulario"/>
+		<br/><br/>
+		
+		<h:form>
+		<p:growl/>
+			<p:dataTable value="#{cursoBean.cursos}" var="curso">
+				<p:column headerText="Nome:">
+					<h:outputText value="#{curso.nome}" />
+				</p:column>
+				
+				<p:column headerText="Duração">
+					<h:outputText value="#{curso.duracao}" />
+				</p:column>
+				
+				<p:column headerText="Tipo">
+					<h:outputText value="#{curso.tipo.label}" />
+				</p:column>
+				
+				<p:column headerText="Data de Criação">
+					<h:outputText value="#{curso.dataCriacao}" >
+					<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align:center;">
+					<p:commandLink value="Editar" action="#{cursoBean.editar(curso)}" style="color:blue;"/>
+					
+					<p:commandLink value="Excluir" oncomplete="PF('confirmarExclusaoDialog').show();" 
+					style="color:red; margin-left:20px;" update="@form" action="#{cursoBean.prepararExclusao(curso)}"/>
+					
+				</p:column>
+			</p:dataTable>
+			
+			<p:confirmDialog message="Deseja realmente excluir o curso #{cursoBean.curso.nome}?" widgetVar="confirmarExclusaoDialog">
+				<p:commandButton value="Sim" action="#{cursoBean.excluir()}" oncomplete="PF('confirmarExclusaoDialog').hide();" 
+				update="@form"/>
+				<p:commandButton value="Não" oncomplete="PF('confirmarExclusaoDialog').hide();"/>
+			</p:confirmDialog>
+			
+		</h:form>
+	</p:panel>
+</h:body>
+
+
+
+</html>
